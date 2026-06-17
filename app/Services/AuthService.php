@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthService
 {
-    public function login(array $credentials)
+    public function loginByEmail(array $credentials)
     {
         $user = User::where('email', $credentials['email'])->first();
 
@@ -28,12 +28,13 @@ class AuthService
         $user = User::create([
             'name'       => $data['name'],
             'email'      => $data['email'],
+            'phone'      => $data['phone'],   
             'password'   => Hash::make($data['password']),
             'user_type'  => $data['user_type'],
             'department' => $data['department'], 
         ]);
 
-        if (in_array($data['user_type'], ['employee' , 'owner' , 'delivery' , 'doctor' , 'manager'])) {
+        if (in_array($data['user_type'], ['employee' , 'owner' , 'delivery' , 'manager'])) {
             $user->assignRole($data['user_type']);
         }
  

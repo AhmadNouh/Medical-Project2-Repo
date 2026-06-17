@@ -1,0 +1,1 @@
+<h3 style="direction: rtl; text-align: right;">كود التحقق الخاص بك لإعادة تعيين كلمة المرور هو: <strong>{{ $code }}</strong></h3>
