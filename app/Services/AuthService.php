@@ -23,6 +23,22 @@ class AuthService
         ];
     }
 
+    public function loginByPhone(array $credentials)
+    {
+        $user = User::where('phone', $credentials['phone'])->first();
+
+        if (!$user || !Hash::check($credentials['password'], $user->password)) {
+            return null;
+        }
+
+        $token = $user->createToken('user_token')->plainTextToken;
+
+        return [
+            'user' => $user,
+            'token' => $token
+        ];
+    }
+
     public function registerUser(array $data)
     {
         $user = User::create([

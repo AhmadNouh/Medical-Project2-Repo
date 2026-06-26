@@ -40,6 +40,37 @@ class AuthDoctorService
         ];
     }
 
+    public function loginDoctorByPhone(array $credentials)
+    {
+        $user = User::where('phone', $credentials['phone'])->first();
+
+        if (!$user || !Hash::check($credentials['password'], $user->password)) {
+            return ['status' => 'invalid_credentails'];
+        }
+
+        if(in_array($user['user_type'], ['doctor' , 'pharmacist'])){
+        
+            $doctorProfile = $user->doctorProfile;
+
+            if(!$doctorProfile){
+                return ['status' => 'account_not_found'];
+            }
+            
+            if($doctorProfile->status !== 'active'){
+                return ['status' => 'not_active'];
+            }
+
+        }
+
+        $token = $user->createToken('medical_token')->plainTextToken;
+
+        return [
+            'status' => 'success',
+            'user' => $user,
+            'token' => $token
+        ];
+    }
+
     public function registerDoctor(array $data)
     {
         return DB::transaction(function () use ($data) {

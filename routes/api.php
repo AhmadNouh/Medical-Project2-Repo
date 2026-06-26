@@ -1,7 +1,11 @@
 <?php
 
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\AuthDoctorController;
+use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Doctor\CategoryController;
+use App\Http\Controllers\Admin\ManageDoctorController;
+use App\Http\Controllers\Admin\ManageProductController;
+use App\Http\Controllers\Doctor\AuthDoctorController;
+use App\Http\Controllers\Doctor\DoctorProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -11,22 +15,33 @@ use Illuminate\Support\Facades\Route;
 
 // Manage Apis
 Route::post('/login-email', [AuthController::class, 'loginByEmail']);
+Route::post('/login-phone', [AuthController::class, 'loginByPhone']);
 
 Route::middleware('auth:sanctum')->group(function(){
 
     Route::post('/logout' , [AuthController::class , 'logout']);
     Route::post('/admin/create-account', [AuthController::class, 'createAccountByAdmin'])->middleware('permission:manage-accounts');
+
+    // Manage Doctor Apis
+    Route::post('/employee/doctor/{doctor}/status', [ManageDoctorController::class, 'updateDoctorAccountStatus'])->middleware('permission:manage-accounts');
+
+    // Manage products Apis
+    Route::post('/admin/products/create-product', [ManageProductController::class, 'createProduct'])->middleware('permission:add-product');
 });
 
 // Doctor Apis
 Route::post('/doctor/login-email' , [AuthDoctorController::class , 'loginDoctorByEmail']);
+Route::post('/doctor/login-phone' , [AuthDoctorController::class , 'loginDoctorByPhone']);
 Route::post('/doctor/register', [AuthDoctorController::class, 'registerDoctor']);
 
 Route::middleware('auth:sanctum')->prefix('doctor')->group(function(){
     
-    Route::post('/logout' , [AuthDoctorController::class , 'logout']);
 });
 
+Route::get('/products', [DoctorProductController::class, 'getProducts']);
+Route::get('/products/{slug}', [DoctorProductController::class, 'showProduct']);
+Route::get('/categories' , [CategoryController::class , 'getCategories']);
+Route::get('/category/{slug}' , [CategoryController::class , 'getProductsInCategory']);
 // Reset Password Apis
 
 Route::prefix('reset')->group(function () {

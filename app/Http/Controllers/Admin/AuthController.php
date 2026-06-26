@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Mail\ResetPasswordOtpMail;
@@ -44,6 +44,27 @@ class AuthController extends Controller
 
         return $this->successResponse($result, 'تم تسجيل الدخول بنجاح');
     }
+
+    public function loginByPhone(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'phone'    => ['required','string', 'regex:/^\+[1-9]\d{1,14}$/'],
+            'password' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->validationErrorResponse($validator->errors());
+        }
+
+        $result = $this->authService->loginByPhone($request->only('phone', 'password'));
+
+        if (!$result) {
+            return $this->unauthorizedResponse('بيانات الدخول التي أدخلتها غير صحيحة');
+        }
+
+        return $this->successResponse($result, 'تم تسجيل الدخول بنجاح');
+    }
+
 
     public function createAccountByAdmin(Request $request)
     {
