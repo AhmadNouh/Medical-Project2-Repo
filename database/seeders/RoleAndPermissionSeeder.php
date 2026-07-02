@@ -13,27 +13,30 @@ class RoleAndPermissionSeeder extends Seeder
     {
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
-        //Permission
-        $addProduct     = Permission::create(['name' => 'add-product']);
-        $deleteProduct  = Permission::create(['name' => 'delete-product']);
-        $viewInventory  = Permission::create(['name' => 'view-inventory']);
-        $manageAccounts = Permission::create(['name' => 'manage-accounts']);
-        $viewAllSales = Permission::create(['name' => 'view-all-sales']);
-        $viewSelfSales = Permission::create(['name' => 'view-Self-Sales']);
-        $acceptOrder = Permission::create(['name' => 'accept-order']);
-        $viewSelfInventory = Permission::create(['name' => 'view-self-inventory']);
+        // Permissions
+        $addProduct        = Permission::findOrCreate('add-product');
+        $deleteProduct     = Permission::findOrCreate('delete-product');
+        $viewInventory     = Permission::findOrCreate('view-inventory');
+        $manageAccounts    = Permission::findOrCreate('manage-accounts');
+        $viewAllSales      = Permission::findOrCreate('view-all-sales');
+        $viewSelfSales     = Permission::findOrCreate('view-Self-Sales');
+        $acceptOrder       = Permission::findOrCreate('accept-order');
+        $viewSelfInventory = Permission::findOrCreate('view-self-inventory');
+        $createOrder       = Permission::findOrCreate('create-order'); 
 
         // Roles
-        $ownerRole    = Role::create(['name' => 'owner']);
-        $employeeRole = Role::create(['name' => 'employee']);
-        $doctorRole   = Role::create(['name' => 'doctor']);
-        $managerRole = Role::create(['name' => 'manager']);
-        $deliveryRole = Role::create(['name' => 'delivery']);
+        $ownerRole    = Role::findOrCreate('owner');
+        $employeeRole = Role::findOrCreate('employee');
+        $doctorRole   = Role::findOrCreate('doctor');
+        $managerRole  = Role::findOrCreate('manager');
+        $deliveryRole = Role::findOrCreate('delivery');
 
-        $ownerRole->givePermissionTo([$addProduct, $deleteProduct, $viewInventory, $manageAccounts , $viewAllSales , $acceptOrder]);
+        $ownerRole->givePermissionTo([$addProduct, $deleteProduct, $viewInventory, $manageAccounts, $viewAllSales, $acceptOrder]);
         
         $employeeRole->givePermissionTo([$viewSelfSales]);
 
-        $managerRole->givePermissionTo([$viewSelfSales , $viewSelfInventory]);
+        $managerRole->givePermissionTo([$viewSelfSales, $viewSelfInventory]);
+
+        $doctorRole->givePermissionTo([$createOrder]);
     }
 }

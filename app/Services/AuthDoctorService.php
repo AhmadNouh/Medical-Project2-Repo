@@ -25,10 +25,14 @@ class AuthDoctorService
                 return ['status' => 'account_not_found'];
             }
             
-            if($doctorProfile->status !== 'active'){
+            if($doctorProfile->status === 'pending' || $doctorProfile->status === 'suspended'){
                 return ['status' => 'not_active'];
             }
 
+        }
+
+        else {
+            return ['status' => 'account_not_found'];
         }
 
         $token = $user->createToken('medical_token')->plainTextToken;
@@ -52,14 +56,17 @@ class AuthDoctorService
         
             $doctorProfile = $user->doctorProfile;
 
-            if(!$doctorProfile){
+            if(!$doctorProfile->id){
                 return ['status' => 'account_not_found'];
             }
             
-            if($doctorProfile->status !== 'active'){
+            if($doctorProfile->status === 'pending' || $doctorProfile->status === 'suspended'){
                 return ['status' => 'not_active'];
             }
-
+        }
+        
+        else {
+            return ['status' => 'account_not_found'];
         }
 
         $token = $user->createToken('medical_token')->plainTextToken;

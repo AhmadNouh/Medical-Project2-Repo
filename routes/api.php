@@ -3,9 +3,12 @@
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Doctor\CategoryController;
 use App\Http\Controllers\Admin\ManageDoctorController;
+use App\Http\Controllers\Admin\ManageOrderController;
 use App\Http\Controllers\Admin\ManageProductController;
 use App\Http\Controllers\Doctor\AuthDoctorController;
 use App\Http\Controllers\Doctor\DoctorProductController;
+use App\Http\Controllers\Doctor\OrderController;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -27,6 +30,11 @@ Route::middleware('auth:sanctum')->group(function(){
 
     // Manage products Apis
     Route::post('/admin/products/create-product', [ManageProductController::class, 'createProduct'])->middleware('permission:add-product');
+
+    // Manage Orders Apis
+    Route::post('/admin/orders/{id}/status', [ManageOrderController::class, 'updateOrderStatus'])->middleware('permission:accept-order');
+    Route::get('employee/get-order-details/{id}' , [ManageOrderController::class , 'getOrderDetails']);
+    Route::get('employee/doctor/{id}/orders' , [ManageOrderController::class , 'getDoctorOrders']);
 });
 
 // Doctor Apis
@@ -35,7 +43,10 @@ Route::post('/doctor/login-phone' , [AuthDoctorController::class , 'loginDoctorB
 Route::post('/doctor/register', [AuthDoctorController::class, 'registerDoctor']);
 
 Route::middleware('auth:sanctum')->prefix('doctor')->group(function(){
-    
+    // Doctor Orders Apis
+    Route::post('/create-order', [OrderController::class, 'CreateNewOrder'])->middleware('permission:create-order');
+    Route::get('/get-order-details/{id}' , [OrderController::class , 'getOrderDetails']);
+    Route::get('/orders' , [OrderController::class , 'getDoctorOrders']);
 });
 
 Route::get('/products', [DoctorProductController::class, 'getProducts']);

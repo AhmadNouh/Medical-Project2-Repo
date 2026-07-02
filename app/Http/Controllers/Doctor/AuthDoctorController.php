@@ -39,7 +39,7 @@ class AuthDoctorController extends Controller
         }
 
         if($result['status'] === 'account_not_found'){
-            return $this->errorResponse('أنت لا تمتلك حساب ، رجاءً انشأ حساب ثم أعد المحاولة' , 404);
+            return $this->errorResponse('أنت لا تمتلك حساب طبيب أو صيدلية ، رجاءً انشأ حساب ثم أعد المحاولة' , 404);
         }
 
         if ($result['status'] === 'not_active'){
@@ -74,7 +74,7 @@ class AuthDoctorController extends Controller
         }
 
         if($result['status'] === 'account_not_found'){
-            return $this->errorResponse('أنت لا تمتلك حساب ، رجاءً انشأ حساب ثم أعد المحاولة' , 404);
+            return $this->errorResponse('أنت لا تمتلك حساب طبيب أو صيدلية، رجاءً انشأ حساب ثم أعد المحاولة' , 404);
         }
 
         if ($result['status'] === 'not_active'){
