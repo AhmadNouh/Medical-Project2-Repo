@@ -5,6 +5,7 @@ use App\Http\Controllers\Doctor\CategoryController;
 use App\Http\Controllers\Admin\ManageDoctorController;
 use App\Http\Controllers\Admin\ManageOrderController;
 use App\Http\Controllers\Admin\ManageProductController;
+use App\Http\Controllers\Admin\ManageUserController;
 use App\Http\Controllers\Doctor\AuthDoctorController;
 use App\Http\Controllers\Doctor\DoctorProductController;
 use App\Http\Controllers\Doctor\OrderController;
@@ -35,6 +36,10 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::post('/admin/orders/{id}/status', [ManageOrderController::class, 'updateOrderStatus'])->middleware('permission:accept-order');
     Route::get('employee/get-order-details/{id}' , [ManageOrderController::class , 'getOrderDetails']);
     Route::get('employee/doctor/{id}/orders' , [ManageOrderController::class , 'getDoctorOrders']);
+
+    // Manage Users Apis
+    Route::get('/admin/show-users' , [ManageUserController::class , 'getUsersWithFilter'])->middleware('permission:manage-accounts');
+
 });
 
 // Doctor Apis

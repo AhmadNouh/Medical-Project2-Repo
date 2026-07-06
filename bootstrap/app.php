@@ -28,34 +28,34 @@ return Application::configure(basePath: dirname(__DIR__))
         return $request->expectsJson();
     });
 
-    $exceptions->render(function (\Spatie\Permission\Exceptions\UnauthorizedException $e, Request $request) {
-        if ($request->is('api/*')) {
-            return response()->json([
-                'status'  => false,
-                'message' => 'عذراً، لا تمتلك الصلاحيات الكافية للوصول إلى هذا الجزء من النظام.',
-                'errors'  => null
-            ], 403);
-        }
-    });
+    // $exceptions->render(function (\Spatie\Permission\Exceptions\UnauthorizedException $e, Request $request) {
+    //     if ($request->is('api/*')) {
+    //         return response()->json([
+    //             'status'  => false,
+    //             'message' => 'عذراً، لا تمتلك الصلاحيات الكافية للوصول إلى هذا الجزء من النظام.',
+    //             'errors'  => null
+    //         ], 403);
+    //     }
+    // });
 
-    $exceptions->render(function (\Exception $e, Request $request) {
-        if ($request->is('api/*')) {
-            return response()->json([
-                'status'  => false,
-                'message' => $e->getMessage(), 
-                'errors'  => null
-            ], 422);
-        }
-    });
+    // $exceptions->render(function (\Exception $e, Request $request) {
+    //     if ($request->is('api/*')) {
+    //         return response()->json([
+    //             'status'  => false,
+    //             'message' => $e->getMessage(), 
+    //             'errors'  => null
+    //         ], 422);
+    //     }
+    // });
 
-    $exceptions->render(function (Throwable $e, Request $request) {
-        if ($request->is('api/*')) {
-            return response()->json([
-                'status'  => false,
-                'message' => 'عذراً، حدث خطأ داخلي غير متوقع في السيرفر.',
-                'error'   => config('app.debug') ? $e->getMessage() : 'Internal Server Error'
-            ], 500);
-        }
-    });
+    // $exceptions->render(function (Throwable $e, Request $request) {
+    //     if ($request->is('api/*')) {
+    //         return response()->json([
+    //             'status'  => false,
+    //             'message' => 'عذراً، حدث خطأ داخلي غير متوقع في السيرفر.',
+    //             'error'   => config('app.debug') ? $e->getMessage() : 'Internal Server Error'
+    //         ], 500);
+    //     }
+    // });
         
     })->create();
